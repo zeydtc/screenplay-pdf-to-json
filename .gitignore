@@ -281,3 +281,12 @@ cython_debug/
 # static files generated from Django application using `collectstatic`
 media
 static
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
