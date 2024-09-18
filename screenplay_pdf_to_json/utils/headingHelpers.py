@@ -1,6 +1,14 @@
 import re
 
-headingEnum = ["EXT./INT.", "EXT/INT.", "INT./EXT.", "EXT/INT","INT/EXT", "INT.", "EXT.", "INT --", "EXT --", "I/E."]
+headingEnum = [
+    # English headings
+    "EXT./INT.", "EXT/INT.", "INT./EXT.", "EXT/INT", "INT/EXT",
+    "INT.", "EXT.", "INT --", "EXT --", "I/E.",
+    # French headings
+    "EXTÉRIEUR/INTÉRIEUR.", "EXT./INT.", "INTÉRIEUR/EXTÉRIEUR.", "INT./EXT.",
+    "INTÉRIEUR.", "EXTÉRIEUR.", "I/E.", "INT./NUIT.", "EXT./JOUR.",
+    "INT./SOIR.", "EXT./SOIR.", "INT./APRÈS-MIDI.", "EXT./APRÈS-MIDI."
+]
 
 
 def isHeading(content):
@@ -29,8 +37,20 @@ def extractTime(text):
         "MOMENTS LATER",
         "LATER",
         "SUNSET",
-        ])
-    regex = '[-,]?[ ]?(DAWN|DUSK|((LATE|EARLY) )?' + timeVocab + ')|\d{4}'
+        "NUIT",
+        "APRÈS-MIDI",
+        "MATIN",
+        "JOUR",
+        "SOIR",
+        "AUBE",
+        "CRÉPUSCULE",
+        "PLUS TARD",
+        "MÊME",
+        "SUITE",
+        "MOMENTS PLUS TARD",
+        "COUCHER DE SOLEIL"
+    ])
+    regex = '[-,]?[ ]?(DAWN|DUSK|((LATE|EARLY|TARD|BONNE) )?' + timeVocab + ')|\d{4}'
     findTime = re.search(
         regex, text)
 
@@ -51,9 +71,8 @@ def extractHeading(text):
         I/E.
     """
     region = re.search(
-        r'((?:.* )?(?:EXT[\.]?\/INT[\.]?|INT[\.]?\/EXT[\.]?|INT(?:\.| --)|EXT(?:\.| --)|I\/E\.))', text).groups()[0]
+        r'((?:.* )?(?:EXT[\.]?\/INT[\.]?|INT[\.]?\/EXT[\.]?|INT(?:\.| --)|EXT(?:\.| --)|I\/E\.|INTÉRIEUR[\.]?\/EXTÉRIEUR[\.]?|EXTÉRIEUR[\.]?\/INTÉRIEUR[\.]?|INTÉRIEUR[\.]?|EXTÉRIEUR[\.]?|INT\.\/NUIT\.|EXT\.\/JOUR\.|INT\.\/SOIR\.|EXT\.\/SOIR\.|INT\.\/APRÈS-MIDI\.|EXT\.\/APRÈS-MIDI\.))', text).groups()[0]
     time = extractTime(text)
-
 
     location = text.replace(region, "")
     if time and len(time) > 0:
@@ -63,10 +82,10 @@ def extractHeading(text):
         region = region.lstrip('0123456789.- ')
         location = location.rstrip('0123456789.- ') if location else location
     time = time[:-1] if time and time[-1].isdigit() else time
-    
 
     return {
         "region": region,
         "location": location.strip("-,. "),
         "time": time
     }
+
