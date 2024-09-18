@@ -5,9 +5,7 @@ headingEnum = [
     "EXT./INT.", "EXT/INT.", "INT./EXT.", "EXT/INT", "INT/EXT",
     "INT.", "EXT.", "INT --", "EXT --", "I/E.",
     # French headings
-    "EXTÉRIEUR/INTÉRIEUR.", "EXT./INT.", "INTÉRIEUR/EXTÉRIEUR.", "INT./EXT.",
-    "INTÉRIEUR.", "EXTÉRIEUR.", "I/E.", "INT./NUIT.", "EXT./JOUR.",
-    "INT./SOIR.", "EXT./SOIR.", "INT./APRÈS-MIDI.", "EXT./APRÈS-MIDI."
+    "EXT./", "EXT/", "INT./", "INT/"
 ]
 
 
@@ -37,20 +35,16 @@ def extractTime(text):
         "MOMENTS LATER",
         "LATER",
         "SUNSET",
-        "NUIT",
-        "APRÈS-MIDI",
-        "MATIN",
+
+        # French 
         "JOUR",
+        "MATIN",
+        "NUIT",
         "SOIR",
         "AUBE",
-        "CRÉPUSCULE",
-        "PLUS TARD",
-        "MÊME",
-        "SUITE",
-        "MOMENTS PLUS TARD",
-        "COUCHER DE SOLEIL"
+        "CRÉPUSCULE"
     ])
-    regex = '[-,]?[ ]?(DAWN|DUSK|((LATE|EARLY|TARD|BONNE) )?' + timeVocab + ')|\d{4}'
+    regex = '[-,]?[ ]?(DAWN|DUSK|((LATE|EARLY) )?' + timeVocab + ')|\d{4}'
     findTime = re.search(
         regex, text)
 
@@ -61,20 +55,24 @@ def extractTime(text):
 
 def extractHeading(text):
     """
-        EXT.?/INT.?
-        INT.?/EXT.?
-        EXT/INT
-        EXT.
-        INT.
-        EXT --
-        INT --
-        I/E.
+    English formats:
+    EXT./INT., INT./EXT., EXT/INT, INT/EXT
+    EXT., INT., EXT --, INT --
+    I/E.
+
+    French formats:
+    EXT./, EXT/, INT./, INT/
     """
     region = re.search(
-        r'((?:.* )?(?:EXT[\.]?\/INT[\.]?|INT[\.]?\/EXT[\.]?|INT(?:\.| --)|EXT(?:\.| --)|I\/E\.|INTÉRIEUR[\.]?\/EXTÉRIEUR[\.]?|EXTÉRIEUR[\.]?\/INTÉRIEUR[\.]?|INTÉRIEUR[\.]?|EXTÉRIEUR[\.]?|INT\.\/NUIT\.|EXT\.\/JOUR\.|INT\.\/SOIR\.|EXT\.\/SOIR\.|INT\.\/APRÈS-MIDI\.|EXT\.\/APRÈS-MIDI\.))', text).groups()[0]
+        r'((?:.* )?(?:EXT[\.]?\/|INT[\.]?\/EXT[\.]?|INT(?:\.| --)|EXT(?:\.| --)|I\/E\.))', text).groups()[0]
+
+    print(region)
     time = extractTime(text)
+    print(time)
 
     location = text.replace(region, "")
+
+    print(location)
     if time and len(time) > 0:
         location = location[:location.index(time[0])]
 
