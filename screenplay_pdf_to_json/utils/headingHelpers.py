@@ -38,11 +38,6 @@ def extractTime(text):
 
         # French 
         "JOUR",
-        "MATIN",
-        "NUIT",
-        "SOIR",
-        "AUBE",
-        "CRÉPUSCULE"
     ])
     regex = '[-,]?[ ]?(DAWN|DUSK|((LATE|EARLY) )?' + timeVocab + ')|\d{4}'
     findTime = re.search(
@@ -64,15 +59,12 @@ def extractHeading(text):
     EXT./, EXT/, INT./, INT/
     """
     region = re.search(
-        r'((?:.* )?(?:EXT[\.]?\/|INT[\.]?\/EXT[\.]?|INT(?:\.| --)|EXT(?:\.| --)|I\/E\.))', text).groups()[0]
+        r'((?:.* )?(?:EXT[\.]?\/(?:INT[\.]?|)?|INT[\.]?\/(?:EXT[\.]?|)?|INT(?:\.| --)|EXT(?:\.| --)|I\/E\.))', text).groups()[0]
 
-    print(region)
     time = extractTime(text)
-    print(time)
 
     location = text.replace(region, "")
 
-    print(location)
     if time and len(time) > 0:
         location = location[:location.index(time[0])]
 
