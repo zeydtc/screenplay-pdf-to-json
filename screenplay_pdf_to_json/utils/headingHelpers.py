@@ -38,6 +38,11 @@ def extractTime(text):
 
         # French 
         "JOUR",
+        "MATIN",
+        "NUIT",
+        "SOIR",
+        "AUBE",
+        "CRÉPUSCULE"
     ])
     regex = '[-,]?[ ]?(DAWN|DUSK|((LATE|EARLY) )?' + timeVocab + ')|\d{4}'
     findTime = re.search(
