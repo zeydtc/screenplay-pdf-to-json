@@ -52,7 +52,11 @@ def extractTime(text):
         "-,. ") for x in text[findTime.start():].split()])) if findTime else None
     return time
 
-
+# TODO: French scenes aren't being detected properly:
+# Only the first word is being detected as the region, the rest is considered part of time.
+# We need to fix this by doing the following:
+# Check whether it's an English heading, if so proceed normally, if it's not then check for french with its cases separately
+# in a different function and distinguish between the region, time and location accordingly.
 def extractHeading(text):
     """
     English formats:
@@ -63,12 +67,23 @@ def extractHeading(text):
     French formats:
     EXT./, EXT/, INT./, INT/
     """
+    # print('new scene: ', text)
     region = re.search(
         r'((?:.* )?(?:EXT[\.]?\/(?:INT[\.]?|)?|INT[\.]?\/(?:EXT[\.]?|)?|INT(?:\.| --)|EXT(?:\.| --)|I\/E\.))', text).groups()[0]
 
+    # For french headings, remove '/'
+    if region.endswith("/"):
+        region = region[:-1]
+
+    # print('region: ', region)
+
     time = extractTime(text)
 
+    # print('time: ', time)
+
     location = text.replace(region, "")
+
+    # print('location: ', location)
 
     if time and len(time) > 0:
         location = location[:location.index(time[0])]
