@@ -71,10 +71,6 @@ def extractHeading(text):
     region = re.search(
         r'((?:.* )?(?:EXT[\.]?\/(?:INT[\.]?|)?|INT[\.]?\/(?:EXT[\.]?|)?|INT(?:\.| --)|EXT(?:\.| --)|I\/E\.))', text).groups()[0]
 
-    # For french headings, remove '/'
-    if region.endswith("/"):
-        region = region[:-1]
-
     # print('region: ', region)
 
     time = extractTime(text)
@@ -82,6 +78,10 @@ def extractHeading(text):
     # print('time: ', time)
 
     location = text.replace(region, "")
+
+    # For french headings, remove '/'
+    if region.endswith("/"):
+        region = region[:-1]
 
     # print('location: ', location)
 
