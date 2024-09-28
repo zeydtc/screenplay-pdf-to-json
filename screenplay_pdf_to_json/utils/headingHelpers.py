@@ -5,7 +5,10 @@ headingEnum = [
     "EXT./INT.", "EXT/INT.", "INT./EXT.", "EXT/INT", "INT/EXT",
     "INT.", "EXT.", "INT --", "EXT --", "I/E.",
     # French headings
-    "EXT./", "EXT/", "INT./", "INT/"
+    "EXT./", "EXT/", "INT./", "INT/",
+    # Spanish headings
+    "EXT./INT.", "EXT/INT.", "INT./EXT.", "EXT/INT", "INT/EXT",
+    "INT.", "EXT.", "INT --", "EXT --", "I/E."
 ]
 
 
@@ -42,11 +45,28 @@ def extractTime(text):
         "NUIT",
         "SOIR",
         "AUBE",
-        "CRÉPUSCULE"
+        "CRÉPUSCULE",
+
+        # Spanish
+        "NOCHE",
+        "TARDE",
+        "MAÑANA",
+        "DÍAS",
+        "DÍA",
+        "NOCHE",
+        "DÍAS",
+        "DÍA",
+        "OTRO DÍA",
+        "DESPUÉS",
+        "NOCHE",
+        "MISMO",
+        "CONTINUO",
+        "MOMENTOS DESPUÉS",
+        "DESPUÉS",
+        "ATARDECER"
     ])
     regex = '[-,]?[ ]?(DAWN|DUSK|((LATE|EARLY) )?' + timeVocab + ')|\d{4}'
-    findTime = re.search(
-        regex, text)
+    findTime = re.search(regex, text)
 
     time = list(filter(lambda x: len(x) > 0, [x.strip(
         "-,. ") for x in text[findTime.start():].split()])) if findTime else None
@@ -66,6 +86,11 @@ def extractHeading(text):
 
     French formats:
     EXT./, EXT/, INT./, INT/
+
+    Spanish formats:
+    EXT./INT., INT./EXT., EXT/INT, INT/EXT
+    EXT., INT., EXT --, INT --
+    I/E.
     """
     # print('new scene: ', text)
     region = re.search(
