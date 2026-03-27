@@ -68,3 +68,36 @@ def test_one_time():
     ]
 
     assertGroup(headings, expectedHeadings)
+
+
+def test_german_reversed_times():
+    headings = [
+        'RESERVAT / KONTROLLZENTRUM CHIEF / INNEN/ABEND',
+        'RESERVAT / BEI BUSCH AN STRASSE / AUSSEN/ABEND',
+        'SZENE / LOCATION / INNEN/TAG',
+    ]
+    headings = [extractTime(h) for h in headings]
+
+    expectedHeadings = [
+        ['ABEND'],
+        ['ABEND'],
+        ['TAG'],
+    ]
+
+    assertGroup(headings, expectedHeadings)
+    headings = [
+        'INNEN. WOHNZIMMER - TAG',
+        'AUSSEN. STRASSE - NACHT',
+        'AUßEN. PARKPLATZ - MORGEN',
+        'INNEN/AUSSEN. AUTO - SPÄTER',
+    ]
+    headings = setupMultipleHeadings(headings)
+
+    expectedHeadings = [
+        ['TAG'],
+        ['NACHT'],
+        ['MORGEN'],
+        ['SPÄTER'],
+    ]
+
+    assertGroup(headings, expectedHeadings)

@@ -53,3 +53,57 @@ def test_word_before_region():
     text = createMockContent(
         'RIGHT IN THE STINT.')
     assert isHeading(text) == False
+
+
+def test_german_innen():
+    text = createMockContent(
+        'INNEN. WOHNZIMMER - TAG')
+    assert isHeading(text) == True
+
+
+def test_german_aussen():
+    text = createMockContent(
+        'AUSSEN. STRASSE - NACHT')
+    assert isHeading(text) == True
+
+
+def test_german_aussen_eszett():
+    text = createMockContent(
+        'AUßEN. PARKPLATZ - TAG')
+    assert isHeading(text) == True
+
+
+def test_german_innen_aussen_combo():
+    text1 = createMockContent(
+        'INNEN/AUSSEN. AUTO - MORGEN')
+    text2 = createMockContent(
+        'AUSSEN/INNEN. HAUS - ABEND')
+    assert isHeading(text1) == True
+    assert isHeading(text2) == True
+
+
+def test_german_innen_aussen_eszett_combo():
+    text1 = createMockContent(
+        'INNEN/AUßEN. AUTO - MORGEN')
+    text2 = createMockContent(
+        'AUßEN/INNEN. HAUS - ABEND')
+    assert isHeading(text1) == True
+    assert isHeading(text2) == True
+
+
+def test_german_reversed_innen():
+    text = createMockContent(
+        'RESERVAT / KONTROLLZENTRUM / INNEN/ABEND')
+    assert isHeading(text) == True
+
+
+def test_german_reversed_aussen():
+    text = createMockContent(
+        'RESERVAT / BEI BUSCH AN STRASSE / AUSSEN/ABEND')
+    assert isHeading(text) == True
+
+
+def test_german_reversed_multi_location():
+    text = createMockContent(
+        'RESERVAT / KONTROLLZENTRUM CHIEF / INNEN/ABEND')
+    assert isHeading(text) == True

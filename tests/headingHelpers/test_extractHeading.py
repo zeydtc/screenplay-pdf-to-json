@@ -86,3 +86,97 @@ def test_both_int_ext():
     ]
 
     assertGroup(headings, expectedHeadings)
+
+
+def test_german_innen():
+    headings = [
+        'INNEN. WOHNZIMMER - TAG',
+    ]
+    headings = setupMultipleHeadings(headings)
+
+    expectedHeadings = [
+        {
+            "region": "INNEN.",
+            "location": "WOHNZIMMER",
+        },
+    ]
+
+    assertGroup(headings, expectedHeadings)
+
+
+def test_german_aussen():
+    headings = [
+        'AUSSEN. STRASSE - NACHT',
+        'AUßEN. PARKPLATZ - TAG',
+    ]
+    headings = setupMultipleHeadings(headings)
+
+    expectedHeadings = [
+        {
+            "region": "AUßEN.",
+            "location": "STRASSE",
+        },
+        {
+            "region": "AUßEN.",
+            "location": "PARKPLATZ",
+        },
+    ]
+
+    assertGroup(headings, expectedHeadings)
+
+
+def test_german_innen_aussen():
+    headings = [
+        'INNEN/AUSSEN. AUTO - MORGEN',
+        'INNEN/AUßEN. HAUS - ABEND',
+        'AUSSEN/INNEN. BÜRO - SPÄTER',
+        'AUßEN/INNEN. SCHULE - TAG',
+    ]
+    headings = setupMultipleHeadings(headings)
+
+    expectedHeadings = [
+        {
+            "region": "INNEN/AUßEN.",
+            "location": "AUTO",
+        },
+        {
+            "region": "INNEN/AUßEN.",
+            "location": "HAUS",
+        },
+        {
+            "region": "AUßEN/INNEN.",
+            "location": "BÜRO",
+        },
+        {
+            "region": "AUßEN/INNEN.",
+            "location": "SCHULE",
+        },
+    ]
+
+    assertGroup(headings, expectedHeadings)
+
+
+def test_german_reversed_format():
+    headings = [
+        'RESERVAT / KONTROLLZENTRUM CHIEF / INNEN/ABEND',
+        'RESERVAT / KONTROLLZENTRUM / INNEN/ABEND',
+        'RESERVAT / BEI BUSCH AN STRASSE / AUSSEN/ABEND',
+    ]
+    headings = setupMultipleHeadings(headings)
+
+    expectedHeadings = [
+        {
+            "region": "INNEN",
+            "location": "RESERVAT / KONTROLLZENTRUM CHIEF",
+        },
+        {
+            "region": "INNEN",
+            "location": "RESERVAT / KONTROLLZENTRUM",
+        },
+        {
+            "region": "AUßEN",
+            "location": "RESERVAT / BEI BUSCH AN STRASSE",
+        },
+    ]
+
+    assertGroup(headings, expectedHeadings)
